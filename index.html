@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+	<head>
+
+		<meta charset="UTF-8">
+	 	<title>Train Scheduler</title>
+	 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Favicon for the webpage -->
+	 	<link rel="icon" href="assets/images/favicon.png" type="image/png" sizes="16x16">
+
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+		<!-- Popper JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+		<!-- Font Awesome icon library -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+	</head>
+
+	<body class="text-center">
+
+		<div class="container">
+			<div class="row m-5">
+		  		<div class="col-md-8 offset-md-2 offset-md-right-2">
+		    		<h1>Rock Paper Scissors</h1>      
+		    	</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-4 mx-auto">
+					<form class="form-inline">
+						<input type="text" class="form-control mr-2 ml-2" id="inlineFormInput" placeholder="Name">
+						<button type="submit" id="name-submit-button" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="row m-2">
+				<div id="player1-div" class="col-md-3 mx-auto border rounded box">
+					Waiting for Player 1
+				</div>
+				<div id="feedback-div" class="col-md-3 border rounded m-1 box">
+				</div>
+				<div id="player2-div" class="col-md-3 mx-auto border rounded box">
+					Waiting for Player 2
+				</div>				
+			</div>
+
+			<div class="row">
+				<div class="col-md-6 offset-md-3 offset-md-right-3 chatbox">
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-4 mx-auto">
+						<form class="form-inline mt-1">
+							<input type="text" class="form-control mr-2 ml-2" id="inlineFormInput" placeholder="comments">
+							<button type="submit" class="btn btn-primary">Send</button>
+						</form>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6 offset-md-3 offset-md-right-3">
+					<div id="reset-database-button" class="btn btn-primary">Reset Database</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Load the associated JavaScript files -->
+		<!-- Firebase database -->
+		<script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+
+		<!-- Load the associated JavaScript files -->
+		<script type="text/javascript" src="assets/javascript/app.js"></script>
+
+	</body>
+
+</html>
