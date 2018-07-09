@@ -2,27 +2,15 @@
 var database = null;
 var player1Info = {};
 var player2Info = {};
+var chat = [];
 
 $(document).ready(function() {
 	// a variable to reference the database.
 	database = initializeFirebase();
 	nameSubmissionListener();
 	deleteDatabaseInfo();
-	// database.ref().child("players").set({1:{"choice": "Rock", "losses": 2, "wins": 1, "name": "Pavan"}});
-	// 	database.ref().on("value", function(snapshot) {
-	// 	// We are now inside our .on function...
-
-	// 	// Console.log the "snapshot" value (a point-in-time representation of the database)
-	// 	// console.log("snapshot.val(): " + snapshot.val());
-
-	// 	// This "snapshot" allows the page to get the most current values in firebase.
-
-	// 	// Update the value of our trainInfoArray to match the info in the database
-	// 	// if (snapshot.val()) {
-	// 		console.log(snapshot.val()); // null if there is no child node
-	// 		console.log(snapshot.val().players);
-	// 	// }
-	// });
+	getPlayer1Info();
+	getPlayer2Info();
 });
 
 function initializeFirebase() {
@@ -42,21 +30,32 @@ function deleteDatabaseInfo() {
     $("#reset-database-button").on("click", function() {
 		database.ref().child("players").remove();
 	});
+	// getPlayer1Info();
+	// getPlayer2Info();
+}
+
+function deletePlayerInfo(playerNumber) {
+    $("#reset-database-button").on("click", function() {
+		database.ref().child("players" + "/" + playerNumber).remove();
+	});
 }
 function nameSubmissionListener() {
 	$("#name-submit-button").on("click", function(event) {
 		event.preventDefault();
 
 		var nameInputfieldId = $("#inlineFormInput");
-		var name = nameInputfieldId.val();
+		var nameInputfieldValue = nameInputfieldId.val();
+		var name = nameInputfieldValue.charAt(0).toUpperCase() + nameInputfieldValue.slice(1);
 		database.ref().once("value", function(snapshot) {
 			if (!snapshot.val()) {
 				player1Info = {"name": name, "choice": "", "wins": 0, "losses": 0};
-				database.ref().child("players/1").set(player1Info);
+				setPlayer1Info();
+				getPlayer1Info();
 				displayPlayerInfo("#player1-div", player1Info);	
 			} else {
 				player2Info = {"name": name, "choice": "", "wins": 0, "losses": 0};
-				database.ref().child("players/2").set(player2Info);
+				setPlayer2Info();
+				getPlayer2Info();
 				displayPlayerInfo("#player2-div", player2Info);
 			}
 			clearInputField(nameInputfieldId);
@@ -64,33 +63,77 @@ function nameSubmissionListener() {
 	});
 }
 
+function getPlayer1Info() {
+	database.ref().on("value", function(snapshot) {
+		console.log("inside getPlayer1Info()");
+		if (snapshot.val() && snapshot.val()["players"] && snapshot.val()["players"][1]) {
+			player1Info = snapshot.val()["players"][1];
+			displayPlayerInfo("#player1-div", player1Info);
+		} else {
+			displayInDiv("#player1-div", "Waiting for Player 1");
+		}
+	});
+}
+
+function setPlayer1Info() {
+	database.ref().child("players/1").set(player1Info);
+}
+
+function getPlayer2Info() {
+	database.ref().on("value", function(snapshot) {
+		console.log("inside getPlayer2Info()");
+		if (snapshot.val() && snapshot.val()["players"] && snapshot.val()["players"][2]) {
+			player2Info = snapshot.val()["players"][2];
+			displayPlayerInfo("#player2-div", player2Info);
+		} else {
+			displayInDiv("#player2-div", "Waiting for Player 2");
+		}
+	});
+}
+
+function setPlayer2Info() {
+	database.ref().child("players/2").set(player2Info);
+}
+
+function getChatMessages() {
+	database.ref().once("value", function(snapshot) {
+		if (!snapshot.val() && !snapshot.val()["chat"]) {
+			chat = snapshot.val()["chat"];
+		}
+	});
+}
+function setChatMessages() {
+	database.ref().child("chat").set(chat);
+}
+
 function clearInputField(fieldId) {
 	$(fieldId).val("");
+}
+
+function displayInDiv(divId, text) {
+	$(divId).text(text);
 }
 
 function displayPlayerInfo(playerDivId, playerInfo) {
 	$(playerDivId).text("");
 
-	var playerNameDiv = $("div");
-	playerNameDiv.addClass("row");
-	playerNameDiv.html("<div class=\"col-md-12\">" + playerInfo["name"] + "</div>");
-	$(playerDivId).append(playerNameDiv);
+	$(playerDivId).append("<div class=\"d-block btn-success border rounded m-3\">" + playerInfo["name"] + "</div>");
 
-	$(playerDivId).append(generateRockPaperScissorsButtons("Rock"));
-	$(playerDivId).append(generateRockPaperScissorsButtons("Paper"));
-	$(playerDivId).append(generateRockPaperScissorsButtons("Scissors"));
+	var rpsInfoDiv = $("<div>");
+	rpsInfoDiv.addClass("rpsInfo");
+	$(rpsInfoDiv).append(generateRockPaperScissorsButtons("Rock"));
+	$(rpsInfoDiv).append(generateRockPaperScissorsButtons("Paper"));
+	$(rpsInfoDiv).append(generateRockPaperScissorsButtons("Scissors"));
+	$(playerDivId).append(rpsInfoDiv);
 
-	var playerWinLossDiv = $("div");
-	playerWinLossDiv.addClass("row");
-	playerWinLossDiv.html("<div class=\"col-md-12\">Wins: " + playerInfo["wins"] + " Losses: " + playerInfo["losses"] + "</div>");
-	$(playerDivId).append(playerWinLossDiv);
-
+	$(playerDivId).append(generatePlayerStatsDiv(playerInfo));
 }
 
 function generateRockPaperScissorsButtons(buttonText) {
-	var buttonTextDiv = $("div");
-	buttonTextDiv.addClass("row");
-	buttonTextDiv.html("<div class=\"col-md-12 btn\">" + buttonText + "</div>");
-	return buttonTextDiv;
+	return "<div class=\"d-block btn btn-warning m-1\">" + buttonText + "</div>";
+}
+
+function generatePlayerStatsDiv(playerInfo) {
+	return "<div class=\"d-block btn-info border rounded m-3\">Wins: " + playerInfo["wins"] + " Losses: " + playerInfo["losses"] + "</div>";
 }
 

@@ -43,3 +43,7 @@ body {
     background-color: #ffffff;
     min-height: 160px;
 }
+
+input {
+    text-align: center;
+}
