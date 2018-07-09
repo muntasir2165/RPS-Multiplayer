@@ -39,6 +39,10 @@ body {
     background-color: #41f49a;
 }
 
+.choice {
+    font-size: 80px;
+}
+
 .chatbox {
     background-color: #ffffff;
     min-height: 160px;

@@ -121,16 +121,23 @@ function displayPlayerInfo(playerDivId, playerInfo) {
 
 	var rpsInfoDiv = $("<div>");
 	rpsInfoDiv.addClass("rpsInfo");
-	$(rpsInfoDiv).append(generateRockPaperScissorsButtons("Rock"));
-	$(rpsInfoDiv).append(generateRockPaperScissorsButtons("Paper"));
-	$(rpsInfoDiv).append(generateRockPaperScissorsButtons("Scissors"));
-	$(playerDivId).append(rpsInfoDiv);
+	$(playerDivId).append(generateRockPaperScissorsButtons(rpsInfoDiv, playerInfo["choice"]));
 
 	$(playerDivId).append(generatePlayerStatsDiv(playerInfo));
 }
 
-function generateRockPaperScissorsButtons(buttonText) {
-	return "<div class=\"d-block btn btn-warning m-1\">" + buttonText + "</div>";
+function generateRockPaperScissorsButtons(parentDiv, choice) {
+	parentDiv.empty();
+
+	if (choice) {
+		parentDiv.append("<div class=\"d-block btn btn-warning m-1 choice\">" + choice + "</div>");
+	} else {
+		parentDiv.append("<div class=\"d-block btn btn-warning m-1\">" + "Rock" + "</div>");
+		parentDiv.append("<div class=\"d-block btn btn-warning m-1\">" + "Paper" + "</div>");
+		parentDiv.append("<div class=\"d-block btn btn-warning m-1\">" + "Scissors" + "</div>");
+	}
+	
+	return parentDiv;
 }
 
 function generatePlayerStatsDiv(playerInfo) {
